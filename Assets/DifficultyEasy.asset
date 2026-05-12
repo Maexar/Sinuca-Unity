@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd8d37f6c90f3124098fb38f49819d95, type: 3}
+  m_Name: DifficultyEasy
+  m_EditorClassIdentifier: Assembly-CSharp::DifficultyData
+  aimAccuracy: 0.3
+  showAimGuide: 1
+  showBallPrediction: 1
+  showPocketIndicator: 1
+  thinkingTime: 3
+  useStrategicPlay: 0
