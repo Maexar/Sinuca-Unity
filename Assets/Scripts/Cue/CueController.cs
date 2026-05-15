@@ -17,7 +17,7 @@ public class CueController : MonoBehaviour
     public float chargeSpeed = 12f;
 
     [Header("Visual do taco")]
-    public float restDistance = 1.0f;
+    public float restDistance = 10.0f;
     public float maxPullback = 1.6f;
     public float aimLineLength = 3.0f;
 
