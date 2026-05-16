@@ -21,9 +21,9 @@ public class CueController : MonoBehaviour
     public LineRenderer aimLine;
 
     [Header("Força da tacada")]
-    public float minPower   = 3f;
-    public float maxPower   = 20f;
-    public float chargeSpeed = 12f;
+    public float minPower   = 1.5f;
+    public float maxPower   = 10f;
+    public float chargeSpeed = 6f;
 
     [Header("Visual do taco")]
     public float restDistance = 0.15f;   // distância da PONTA à bola em repouso
