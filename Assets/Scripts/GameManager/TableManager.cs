@@ -82,7 +82,7 @@ public class SnookerTableBuilder : MonoBehaviour
 
     // ─────────────────────────────────────────────────────────────────────────
 
-    void Start() => BuildTable();
+    // void Start() => BuildTable(); // Comentado para evitar que a mesa seja recriada ao dar play.
 
     [ContextMenu("Build Table")]
     public void BuildTable()

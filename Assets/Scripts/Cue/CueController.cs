@@ -177,6 +177,10 @@ public class CueController : MonoBehaviour
         _isCharging = false;
         _canShoot   = false;
 
+        // Esconder a linha de mira e o taco ao dar a tacada
+        if (aimLine != null) aimLine.gameObject.SetActive(false);
+        if (cueMesh != null) cueMesh.gameObject.SetActive(false);
+
         BallController ball = cueBall.GetComponent<BallController>();
         if (ball != null)
             ball.ApplyImpulse(_aimDirection, _currentPower);
@@ -186,7 +190,11 @@ public class CueController : MonoBehaviour
         if (requireAllBallsStopped)
             StartCoroutine(WaitForBallsToStop());
         else
+        {
             _canShoot = true;
+            if (aimLine != null) aimLine.gameObject.SetActive(true);
+            if (cueMesh != null) cueMesh.gameObject.SetActive(true);
+        }
     }
 
     private IEnumerator WaitForBallsToStop()
@@ -195,6 +203,9 @@ public class CueController : MonoBehaviour
             yield return null;
 
         _canShoot = true;
+        // Mostrar o taco e a mira novamente após as bolas pararem
+        if (aimLine != null) aimLine.gameObject.SetActive(true);
+        if (cueMesh != null) cueMesh.gameObject.SetActive(true);
     }
 
     // ── API pública (para o TurnManager controlar permissão de tacada) ────────
