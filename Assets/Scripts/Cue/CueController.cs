@@ -61,6 +61,13 @@ public class CueController : MonoBehaviour
             mainCamera = Camera.main;
     }
 
+    private void Start()
+    {
+        // Garante que o taco e a linha iniciem ativados
+        if (aimLine != null) aimLine.gameObject.SetActive(true);
+        if (cueMesh != null) cueMesh.gameObject.SetActive(true);
+    }
+
     private void Update()
     {
         if (cueBall == null || cuePivot == null || cueMesh == null || mainCamera == null)
@@ -69,8 +76,21 @@ public class CueController : MonoBehaviour
         if (!cueBall.gameObject.activeInHierarchy)
             return;
 
-        if (!_canShoot)
+        // Controle ABSOLUTO de visibilidade do taco atrelado ao _canShoot
+        if (_canShoot)
+        {
+            if (!cuePivot.gameObject.activeSelf) cuePivot.gameObject.SetActive(true);
+            if (!cueMesh.gameObject.activeSelf) cueMesh.gameObject.SetActive(true);
+            if (aimLine != null && !aimLine.gameObject.activeSelf) aimLine.gameObject.SetActive(true);
+        }
+        else
+        {
+            // Força a ficar invisível enquanto as bolas estiverem rolando
+            if (cuePivot.gameObject.activeSelf) cuePivot.gameObject.SetActive(false);
+            if (cueMesh.gameObject.activeSelf) cueMesh.gameObject.SetActive(false);
+            if (aimLine != null && aimLine.gameObject.activeSelf) aimLine.gameObject.SetActive(false);
             return;
+        }
 
         Mouse mouse = Mouse.current;
         if (mouse == null)
@@ -175,11 +195,7 @@ public class CueController : MonoBehaviour
     private void Shoot()
     {
         _isCharging = false;
-        _canShoot   = false;
-
-        // Esconder a linha de mira e o taco ao dar a tacada
-        if (aimLine != null) aimLine.gameObject.SetActive(false);
-        if (cueMesh != null) cueMesh.gameObject.SetActive(false);
+        _canShoot   = false;  // O Update() detectará que é false e esconderá tudo imediatamente
 
         BallController ball = cueBall.GetComponent<BallController>();
         if (ball != null)
@@ -190,15 +206,15 @@ public class CueController : MonoBehaviour
         if (requireAllBallsStopped)
             StartCoroutine(WaitForBallsToStop());
         else
-        {
-            _canShoot = true;
-            if (aimLine != null) aimLine.gameObject.SetActive(true);
-            if (cueMesh != null) cueMesh.gameObject.SetActive(true);
-        }
+            _canShoot = true; // Se não for pra esperar, já volta a ativar no próximo frame
     }
 
     private IEnumerator WaitForBallsToStop()
     {
+        // Aguarda um pequeno instante (0.2s) para a física (FixedUpdate) começar a mover as bolas
+        // antes de verificar se elas já estão paradas.
+        yield return new WaitForSeconds(0.2f);
+
         while (!TurnManager.AllBallsStopped())
             yield return null;
 

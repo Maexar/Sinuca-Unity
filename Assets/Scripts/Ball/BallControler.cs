@@ -28,13 +28,13 @@ public class BallController : MonoBehaviour
     // ── Física ────────────────────────────────────────────────────────────────
     [Header("Física de rolamento")]
     [Tooltip("Atrito linear — quanto maior, mais rápido a bola para.")]
-    public float rollingFrictionLinear  = 0.25f;
+    public float rollingFrictionLinear  = 0.55f;
 
     [Tooltip("Atrito rotacional (spin).")]
-    public float rollingFrictionAngular = 0.15f;
+    public float rollingFrictionAngular = 0.40f;
 
     [Tooltip("Velocidade abaixo da qual a bola é considerada parada.")]
-    public float sleepThreshold = 0.05f;
+    public float sleepThreshold = 0.15f;
 
     // ── Internos ──────────────────────────────────────────────────────────────
     private Rigidbody _rb;
@@ -71,8 +71,8 @@ public class BallController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
 
         _rb.mass                  = 0.17f;
-        _rb.linearDamping         = 0.05f;
-        _rb.angularDamping        = 0.05f;
+        _rb.linearDamping         = 0.35f;
+        _rb.angularDamping        = 0.45f;
         _rb.useGravity            = true;
         _rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
     }
