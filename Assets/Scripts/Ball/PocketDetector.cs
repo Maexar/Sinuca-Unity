@@ -4,19 +4,13 @@ public class PocketDetector : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Ball"))
-            return;
-
         BallController ball = other.GetComponent<BallController>();
-        if (ball == null)
+        if (ball == null || ball.ballType == BallType.Cue)
             return;
 
-        if (GameManager.Instance == null)
-        {
-            Debug.LogWarning("GameManager não encontrado na cena.");
-            return;
-        }
-
-        GameManager.Instance.OnBallPocketed(ball);
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnBallPocketed(ball);
+        else if (!ball.IsPocketed)
+            ball.Pocket();
     }
 }

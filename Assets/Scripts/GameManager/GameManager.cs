@@ -52,6 +52,10 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Falta: bola branca encaçapada.");
         }
+        else if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.AddScore(TurnManager.Instance.CurrentPlayer);
+        }
     }
 }
 

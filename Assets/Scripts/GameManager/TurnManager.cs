@@ -1,17 +1,41 @@
+using System;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static TurnManager Instance { get; private set; }
+
+    public static event Action OnTurnChanged;
+
+    public int CurrentPlayer { get; private set; } = 0;
+    public int[] Scores { get; private set; } = new int[2];
+
+    private int _ballsPocketedThisTurn = 0;
+
+    private void Awake()
     {
-        
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnTurnEnd()
     {
-        
+        if (_ballsPocketedThisTurn == 0)
+            CurrentPlayer = 1 - CurrentPlayer;
+
+        _ballsPocketedThisTurn = 0;
+        OnTurnChanged?.Invoke();
+    }
+
+    public void AddScore(int playerIndex, int points = 1)
+    {
+        Scores[playerIndex] += points;
+        _ballsPocketedThisTurn++;
+        OnTurnChanged?.Invoke();
     }
 
     public static bool AllBallsStopped()
@@ -27,17 +51,14 @@ public class TurnManager : MonoBehaviour
 
             if (!ball.IsPocketed && !ball.IsStopped)
             {
-                // Verifica se a bola caiu no infinito (vão do mapa) - safety check
                 if (ball.transform.position.y < -5f)
                 {
                     ball.Pocket();
-                    continue; // Se ela foi jogada pro void, conta como encaçapada/parada
+                    continue;
                 }
-                
                 return false;
             }
         }
         return true;
     }
 }
-

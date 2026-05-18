@@ -229,6 +229,8 @@ public class CueController : MonoBehaviour
         while (!TurnManager.AllBallsStopped())
             yield return null;
 
+        if (TurnManager.Instance != null) TurnManager.Instance.OnTurnEnd();
+
         _canShoot = true;
         // Mostrar o taco e a mira novamente após as bolas pararem
         if (aimLine != null) aimLine.gameObject.SetActive(true);
