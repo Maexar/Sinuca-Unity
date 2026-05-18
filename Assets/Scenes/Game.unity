@@ -7098,9 +7098,9 @@ MonoBehaviour:
   cueMesh: {fileID: 3803049966943694488, guid: 6cd2acaeba4bf024f870e7c3e06264fd, type: 3}
   mainCamera: {fileID: 1815680839}
   aimLine: {fileID: 1448765726}
-  minPower: 3
-  maxPower: 20
-  chargeSpeed: 12
+  minPower: 1
+  maxPower: 10
+  chargeSpeed: 6
   restDistance: 0.15
   maxPullback: 1.6
   aimLineLength: 3

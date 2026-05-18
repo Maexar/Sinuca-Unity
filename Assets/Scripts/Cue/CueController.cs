@@ -47,11 +47,9 @@ public class CueController : MonoBehaviour
     private bool    _isCharging;
     private bool    _canShoot = true;
 
-    // ── posição local do mesh em repouso (calculada uma vez) ─────────────────
-    // Z = -(restDistance + meshTipOffset)
-    // "restDistance" é a folga da ponta até a bola; "meshTipOffset" desloca
-    // o centro do FBX para que a ponta (não o centro) fique nessa posição.
-    private Vector3 RestLocalPos => new Vector3(0f, 0f, -(restDistance + meshTipOffset));
+    // ── posição local do mesh em repouso ─────────────────
+    // Vai guardar onde o taco estava posicionado pelo usuário!
+    private Vector3 _initialRestLocalPos;
 
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -59,6 +57,13 @@ public class CueController : MonoBehaviour
     {
         if (mainCamera == null)
             mainCamera = Camera.main;
+
+        // Auto-atribuir o cueMesh se ele não for o correto da hierarquia do jogo
+        if (cuePivot != null && cuePivot.childCount > 0)
+        {
+            // Pega o primeiro objeto que estiver dentro do CuePivot
+            cueMesh = cuePivot.GetChild(0);
+        }
     }
 
     private void Start()
@@ -66,6 +71,12 @@ public class CueController : MonoBehaviour
         // Garante que o taco e a linha iniciem ativados
         if (aimLine != null) aimLine.gameObject.SetActive(true);
         if (cueMesh != null) cueMesh.gameObject.SetActive(true);
+
+        // Salvar a posição que você ajeitou na mão lá na Unity como a Posição Inicial!
+        if (cueMesh != null)
+        {
+            _initialRestLocalPos = cueMesh.localPosition;
+        }
     }
 
     private void Update()
@@ -135,7 +146,7 @@ public class CueController : MonoBehaviour
 
         // só reposiciona em repouso; durante o charge, UpdateCuePullback cuida disso
         if (!_isCharging)
-            cueMesh.localPosition = RestLocalPos;
+            cueMesh.localPosition = _initialRestLocalPos;
     }
 
     // ── Linha de mira ─────────────────────────────────────────────────────────
@@ -188,8 +199,8 @@ public class CueController : MonoBehaviour
         float t        = Mathf.InverseLerp(minPower, maxPower, _currentPower);
         float pullback = Mathf.Lerp(0f, maxPullback, t);
 
-        // FIX: inclui meshTipOffset para que o recuo saia da ponta, não do centro
-        cueMesh.localPosition = new Vector3(0f, 0f, -(restDistance + meshTipOffset + pullback));
+        // Adiciona a distância do pullback no eixo Z a partir da posição inicial que você arrumou!
+        cueMesh.localPosition = _initialRestLocalPos + new Vector3(0f, 0f, -pullback);
     }
 
     private void Shoot()
@@ -201,7 +212,7 @@ public class CueController : MonoBehaviour
         if (ball != null)
             ball.ApplyImpulse(_aimDirection, _currentPower);
 
-        cueMesh.localPosition = RestLocalPos;
+        cueMesh.localPosition = _initialRestLocalPos;
 
         if (requireAllBallsStopped)
             StartCoroutine(WaitForBallsToStop());
