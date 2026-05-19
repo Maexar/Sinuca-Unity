@@ -73,6 +73,12 @@ public class SnookerTableBuilder : MonoBehaviour
     public Material pocketMaterial;
     public Material metalMaterial;
 
+    // ─── Física das Tabelas ───────────────────────────────────────────────────
+    [Header("Física das Tabelas (Cushions)")]
+    [Tooltip("Elasticidade das tabelas. 0 = sem ricochete, 1 = ricochete total. ~0.75 é realista para sinuca.")]
+    [Range(0f, 1f)]
+    public float cushionBounciness = 0.75f;
+
     // ── Cores padrão ──────────────────────────────────────────────────────────
     static readonly Color C_Felt    = new Color(0.10f, 0.45f, 0.15f);
     static readonly Color C_Cushion = new Color(0.07f, 0.36f, 0.09f);
@@ -82,7 +88,30 @@ public class SnookerTableBuilder : MonoBehaviour
 
     // ─────────────────────────────────────────────────────────────────────────
 
-    // void Start() => BuildTable(); // Comentado para evitar que a mesa seja recriada ao dar play.
+    private void Start()
+    {
+        ApplyCushionPhysics();
+    }
+
+    private void ApplyCushionPhysics()
+    {
+        var mat = new PhysicsMaterial("CushionBounce")
+        {
+            bounciness      = cushionBounciness,
+            bounceCombine   = PhysicsMaterialCombine.Maximum,
+            frictionCombine = PhysicsMaterialCombine.Minimum,
+            staticFriction  = 0.1f,
+            dynamicFriction = 0.1f
+        };
+
+        foreach (Collider col in GetComponentsInChildren<Collider>(true))
+        {
+            if (col.isTrigger) continue;
+            string n = col.gameObject.name;
+            if (n.StartsWith("Cushion") || n.StartsWith("Jaw"))
+                col.sharedMaterial = mat;
+        }
+    }
 
     [ContextMenu("Build Table")]
     public void BuildTable()

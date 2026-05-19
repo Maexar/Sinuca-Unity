@@ -80,6 +80,18 @@ public class BallController : MonoBehaviour
         // CollisionDetectionMode.Continuous só funciona contra colisores ESTÁTICOS,
         // causando tunneling em colisões entre bolas a alta velocidade.
         _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+
+        if (TryGetComponent(out SphereCollider sc))
+        {
+            sc.sharedMaterial = new PhysicsMaterial("BallPhysics")
+            {
+                bounciness      = 0.6f,
+                bounceCombine   = PhysicsMaterialCombine.Maximum,
+                frictionCombine = PhysicsMaterialCombine.Minimum,
+                staticFriction  = 0.05f,
+                dynamicFriction = 0.05f
+            };
+        }
     }
 
     private void Start()

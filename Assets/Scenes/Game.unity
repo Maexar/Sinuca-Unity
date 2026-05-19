@@ -4874,30 +4874,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1200754130}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d65a18772e77824abc1d2614e2a8ffe, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b5b6057fa9676d4ba8c6b0fda741de7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SnookerTableBuilder
-  tableWidth: 2.74
-  tableDepth: 1.37
-  tableThickness: 0.1
-  legHeight: 1
-  legSize: 0.08
-  cushionWidth: 0.07
-  cushionHeight: 0.04
-  pocketRadius: 0.055
-  pocketDepth: 0.04
-  rimExtra: 0.012
-  jawLength: 0.09
-  jawThick: 0.048
-  pocketTriggerRadiusMultiplier: 1.3
-  pocketTriggerCenterY: -0.02
-  feltMaterial: {fileID: 0}
-  cushionMaterial: {fileID: 2100000, guid: dfce70cdba9149e4eab2c182cdf16428, type: 2}
-  woodMaterial: {fileID: 0}
-  pocketMaterial: {fileID: 2100000, guid: b7129e2b905793a4598e518131f37b42, type: 2}
-  metalMaterial: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::CushionPhysics
+  cushions:
+  - {fileID: 1199930884}
+  - {fileID: 831388696}
+  - {fileID: 1148404873}
+  - {fileID: 1935985107}
+  - {fileID: 879248087}
+  - {fileID: 871250087}
+  bounciness: 0.463
 --- !u!1 &1214151966
 GameObject:
   m_ObjectHideFlags: 0
@@ -6027,7 +6016,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1448765725
 Transform:
   m_ObjectHideFlags: 0
@@ -7441,7 +7430,7 @@ MonoBehaviour:
   cuePivot: {fileID: 3191361}
   cueMesh: {fileID: 3803049966943694488, guid: 6cd2acaeba4bf024f870e7c3e06264fd, type: 3}
   mainCamera: {fileID: 1815680839}
-  aimLine: {fileID: 0}
+  aimLine: {fileID: 1448765726}
   minPower: 1
   maxPower: 10
   chargeSpeed: 6
