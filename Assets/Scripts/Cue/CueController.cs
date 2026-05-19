@@ -94,6 +94,9 @@ public class CueController : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale == 0f)
+            return;
+
         if (cueBall == null || cuePivot == null || cueMesh == null || mainCamera == null)
             return;
 
