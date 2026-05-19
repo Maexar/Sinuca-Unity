@@ -2,21 +2,13 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// Controla o taco: mira via raycast, carga de força e tacada
-/// 
-/// FIX — Pivot do taco:
-///   O FBX do taco tem o pivot no centro do modelo. Para que a PONTA
-///   fique no centro da bola branca (origem do cuePivot), precisamos
-///   deslocar o mesh ao longo de -Z pela metade do comprimento do modelo.
-///   Ajuste "Mesh Tip Offset" no Inspector até que a ponta toque a bola.
-/// </summary>
+
 public class CueController : MonoBehaviour
 {
     [Header("Referências")]
-    public Transform cueBall;       // White_Ball (transform da bola branca)
-    public Transform cuePivot;      // Empty no centro da bola — eixo de rotação
-    public Transform cueMesh;       // Modelo FBX do taco (filho do cuePivot)
+    public Transform cueBall;       //(transform da bola branca)
+    public Transform cuePivot;      // Empty no centro da bola  (eixo de rotacao)
+    public Transform cueMesh;       
     public Camera    mainCamera;
     public LineRenderer aimLine;
 
@@ -26,8 +18,8 @@ public class CueController : MonoBehaviour
     public float chargeSpeed = 6f;
 
     [Header("Visual do taco")]
-    public float restDistance = 0.15f;   // distância da PONTA à bola em repouso
-    public float maxPullback  = 0.55f;   // recuo máximo ao carregar força
+    public float restDistance = 0.15f;   // distancia da PONTA à bola em repouso
+    public float maxPullback  = 0.55f;   // recuo maximo ao carregar força
     public float aimLineLength = 3.0f;
 
     // ── FIX: pivot ────────────────────────────────────────────────────────────
