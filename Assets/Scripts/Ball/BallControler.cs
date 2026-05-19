@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -225,15 +226,23 @@ public class BallController : MonoBehaviour
 
     public void Pocket()
     {
+        if (IsPocketed) return;
         IsPocketed          = true;
         _rb.isKinematic     = true;
         _rb.linearVelocity  = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
+        StartCoroutine(DisableNextFrame());
+    }
+
+    private IEnumerator DisableNextFrame()
+    {
+        yield return null;
         gameObject.SetActive(false);
     }
 
     public void ResetBall(Vector3 position)
     {
+        StopAllCoroutines();
         IsPocketed          = false;
         IsStopped           = true;
         _rb.isKinematic     = false;

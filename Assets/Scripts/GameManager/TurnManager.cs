@@ -10,7 +10,8 @@ public class TurnManager : MonoBehaviour
     public int CurrentPlayer { get; private set; } = 0;
     public int[] Scores { get; private set; } = new int[2];
 
-    private int _ballsPocketedThisTurn = 0;
+    private int  _ballsPocketedThisTurn = 0;
+    private bool _foulThisTurn          = false;
 
     private void Awake()
     {
@@ -22,12 +23,19 @@ public class TurnManager : MonoBehaviour
         Instance = this;
     }
 
+    public void ReportFoul()
+    {
+        _foulThisTurn = true;
+    }
+
     public void OnTurnEnd()
     {
-        if (_ballsPocketedThisTurn == 0)
+        bool shouldSwitch = _ballsPocketedThisTurn == 0 || _foulThisTurn;
+        if (shouldSwitch)
             CurrentPlayer = 1 - CurrentPlayer;
 
         _ballsPocketedThisTurn = 0;
+        _foulThisTurn          = false;
         OnTurnChanged?.Invoke();
     }
 

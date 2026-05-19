@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour
         if (ball.ballType == BallType.Cue)
         {
             Debug.Log("[GameManager] Falta! Iniciando respawn da bola branca em 1.5s...");
+            if (TurnManager.Instance != null)
+                TurnManager.Instance.ReportFoul();
             StartCoroutine(RespawnCueBall(ball));
         }
         else if (TurnManager.Instance != null)
