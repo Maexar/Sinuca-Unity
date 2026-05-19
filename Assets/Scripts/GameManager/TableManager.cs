@@ -87,8 +87,13 @@ public class SnookerTableBuilder : MonoBehaviour
     [ContextMenu("Build Table")]
     public void BuildTable()
     {
-        Transform old = transform.Find("Table");
-        if (old) DestroyImmediate(old.gameObject);
+        // Remove TODOS os filhos que sejam mesas — evita duplicatas "Table (1)", "Table (2)"...
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.name == "Table" || child.name.StartsWith("Table ("))
+                DestroyImmediate(child.gameObject);
+        }
 
         GameObject table = new GameObject("Table");
         table.transform.SetParent(transform, false);
