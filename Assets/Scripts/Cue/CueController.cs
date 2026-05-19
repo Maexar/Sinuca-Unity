@@ -47,9 +47,9 @@ public class CueController : MonoBehaviour
     private bool    _isCharging;
     private bool    _canShoot = true;
 
-    // ── posição local do mesh em repouso ─────────────────
-    // Vai guardar onde o taco estava posicionado pelo usuário!
-    private Vector3 _initialRestLocalPos;
+    // Rotação fixa do cilindro: 90° em X gira o eixo Y (altura do cilindro) para o eixo Z (direção de mira)
+    private static readonly Quaternion CueMeshRot = Quaternion.Euler(90f, 0f, 0f);
+    private Vector3 _restLocalPos;
 
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -68,14 +68,27 @@ public class CueController : MonoBehaviour
 
     private void Start()
     {
-        // Garante que o taco e a linha iniciem ativados
-        if (aimLine != null) aimLine.gameObject.SetActive(true);
-        if (cueMesh != null) cueMesh.gameObject.SetActive(true);
+        if (aimLine != null)
+        {
+            aimLine.gameObject.SetActive(true);
+            aimLine.useWorldSpace = true;
+        }
 
-        // Salvar a posição que você ajeitou na mão lá na Unity como a Posição Inicial!
         if (cueMesh != null)
         {
-            _initialRestLocalPos = cueMesh.localPosition;
+            cueMesh.gameObject.SetActive(true);
+            _restLocalPos = new Vector3(0f, 0f, -(meshTipOffset + restDistance));
+            cueMesh.localPosition = _restLocalPos;
+            cueMesh.localRotation = CueMeshRot;
+
+            // Taco controlado por script — física não deve mover nem inclinar o mesh
+            Rigidbody cueRb = cueMesh.GetComponentInChildren<Rigidbody>();
+            if (cueRb != null)
+                cueRb.isKinematic = true;
+
+            // Remove colisores do taco para não empurrar bolas numeradas
+            foreach (Collider col in cueMesh.GetComponentsInChildren<Collider>(true))
+                col.enabled = false;
         }
     }
 
@@ -138,15 +151,19 @@ public class CueController : MonoBehaviour
 
     private void UpdateCueTransform()
     {
-        // pivot grudado à bola branca
         cuePivot.position = cueBall.position;
 
-        if (_aimDirection.sqrMagnitude > 0.0001f)
-            cuePivot.rotation = Quaternion.LookRotation(_aimDirection, Vector3.up);
+        // Garante que o pivot nunca tenha componente Y na direção (sem inclinação)
+        Vector3 flatDir = _aimDirection;
+        flatDir.y = 0f;
+        if (flatDir.sqrMagnitude > 0.0001f)
+            cuePivot.rotation = Quaternion.LookRotation(flatDir.normalized, Vector3.up);
 
-        // só reposiciona em repouso; durante o charge, UpdateCuePullback cuida disso
         if (!_isCharging)
-            cueMesh.localPosition = _initialRestLocalPos;
+        {
+            cueMesh.localPosition = _restLocalPos;
+            cueMesh.localRotation = CueMeshRot;
+        }
     }
 
     // ── Linha de mira ─────────────────────────────────────────────────────────
@@ -200,7 +217,8 @@ public class CueController : MonoBehaviour
         float pullback = Mathf.Lerp(0f, maxPullback, t);
 
         // Adiciona a distância do pullback no eixo Z a partir da posição inicial que você arrumou!
-        cueMesh.localPosition = _initialRestLocalPos + new Vector3(0f, 0f, -pullback);
+        cueMesh.localPosition = _restLocalPos + new Vector3(0f, 0f, -pullback);
+        cueMesh.localRotation = CueMeshRot;
     }
 
     private void Shoot()
@@ -212,7 +230,7 @@ public class CueController : MonoBehaviour
         if (ball != null)
             ball.ApplyImpulse(_aimDirection, _currentPower);
 
-        cueMesh.localPosition = _initialRestLocalPos;
+        cueMesh.localPosition = _restLocalPos;
 
         if (requireAllBallsStopped)
             StartCoroutine(WaitForBallsToStop());
