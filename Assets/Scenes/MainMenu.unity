@@ -340,7 +340,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 361938569}
-  - component: {fileID: 361938568}
   - component: {fileID: 361938570}
   m_Layer: 0
   m_Name: MenuManager
@@ -349,21 +348,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &361938568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 361938567}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5576d879f5e0d384884ca27e346b181a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  settings: {fileID: 11400000, guid: e327f34cdd0d3e04a977ba8743c7d577, type: 2}
-  difficultyData: {fileID: 11400000, guid: 8382ff79584488a439fa8d0d25beb9d7, type: 2}
-  cueBallSpawnPoint: {fileID: 0}
 --- !u!4 &361938569
 Transform:
   m_ObjectHideFlags: 0
