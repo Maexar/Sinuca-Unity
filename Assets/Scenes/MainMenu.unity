@@ -135,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &361938568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   settings: {fileID: 11400000, guid: e327f34cdd0d3e04a977ba8743c7d577, type: 2}
   difficultyData: {fileID: 11400000, guid: 8382ff79584488a439fa8d0d25beb9d7, type: 2}
+  cueBallSpawnPoint: {fileID: 0}
 --- !u!4 &361938569
 Transform:
   m_ObjectHideFlags: 0

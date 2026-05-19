@@ -28,13 +28,13 @@ public class BallController : MonoBehaviour
     // ── Física ────────────────────────────────────────────────────────────────
     [Header("Física de rolamento")]
     [Tooltip("Atrito linear — quanto maior, mais rápido a bola para.")]
-    public float rollingFrictionLinear  = 0.55f;
+    public float rollingFrictionLinear  = 0.30f;
 
     [Tooltip("Atrito rotacional (spin).")]
-    public float rollingFrictionAngular = 0.40f;
+    public float rollingFrictionAngular = 0.20f;
 
-    [Tooltip("Velocidade abaixo da qual a bola é considerada parada.")]
-    public float sleepThreshold = 0.15f;
+    [Tooltip("Velocidade abaixo da qual a bola é considerada parada (m/s). Valor alto causa parada brusca.")]
+    public float sleepThreshold = 0.02f;
 
     // ── Internos ──────────────────────────────────────────────────────────────
     private Rigidbody _rb;
@@ -70,11 +70,15 @@ public class BallController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
 
-        _rb.mass                  = 0.17f;
-        _rb.linearDamping         = 0.35f;
-        _rb.angularDamping        = 0.45f;
-        _rb.useGravity            = true;
-        _rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        _rb.mass                   = 0.17f;
+        _rb.linearDamping          = 0.08f;   // baixo — atrito customizado já desacelera a bola
+        _rb.angularDamping         = 0.20f;
+        _rb.useGravity             = true;
+        _rb.interpolation          = RigidbodyInterpolation.Interpolate; // visual suave entre steps
+        // ContinuousSpeculative detecta colisões bola-a-bola (dinâmica vs dinâmica).
+        // CollisionDetectionMode.Continuous só funciona contra colisores ESTÁTICOS,
+        // causando tunneling em colisões entre bolas a alta velocidade.
+        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
     }
 
     private void Start()

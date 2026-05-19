@@ -51,11 +51,17 @@ public class TurnManager : MonoBehaviour
 
             if (!ball.IsPocketed && !ball.IsStopped)
             {
+                // Bola caiu fora do mapa — rota pelo GameManager para acionar respawn da branca
                 if (ball.transform.position.y < -5f)
                 {
-                    ball.Pocket();
+                    Debug.Log($"[TurnManager] Bola {ball.ballNumber} caiu fora do mapa, encaçapando via GameManager.");
+                    if (GameManager.Instance != null)
+                        GameManager.Instance.OnBallPocketed(ball);
+                    else
+                        ball.Pocket();
                     continue;
                 }
+
                 return false;
             }
         }
