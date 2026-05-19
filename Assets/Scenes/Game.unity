@@ -4886,7 +4886,7 @@ MonoBehaviour:
   - {fileID: 1935985107}
   - {fileID: 879248087}
   - {fileID: 871250087}
-  bounciness: 0.463
+  bounciness: 0.138
 --- !u!1 &1214151966
 GameObject:
   m_ObjectHideFlags: 0
