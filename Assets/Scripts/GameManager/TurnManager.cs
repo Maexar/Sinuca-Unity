@@ -5,13 +5,15 @@ public class TurnManager : MonoBehaviour
 {
     public static TurnManager Instance { get; private set; }
 
-    public static event Action OnTurnChanged;
+    public static event Action     OnTurnChanged;
+    public static event Action<int> OnGameOver;   // -1 = empate, 0 = J1 vence, 1 = J2 vence
 
     public int CurrentPlayer { get; private set; } = 0;
     public int[] Scores { get; private set; } = new int[2];
 
     private int  _ballsPocketedThisTurn = 0;
     private bool _foulThisTurn          = false;
+    private bool _gameOver              = false;
 
     private void Awake()
     {
@@ -30,6 +32,8 @@ public class TurnManager : MonoBehaviour
 
     public void OnTurnEnd()
     {
+        if (_gameOver) return;
+
         bool shouldSwitch = _ballsPocketedThisTurn == 0 || _foulThisTurn;
         if (shouldSwitch)
             CurrentPlayer = 1 - CurrentPlayer;
@@ -37,6 +41,25 @@ public class TurnManager : MonoBehaviour
         _ballsPocketedThisTurn = 0;
         _foulThisTurn          = false;
         OnTurnChanged?.Invoke();
+        CheckGameOver();
+    }
+
+    private void CheckGameOver()
+    {
+        foreach (var ball in BallController.AllBalls)
+        {
+            if (ball != null && !ball.IsPocketed && ball.ballType != BallType.Cue)
+                return;
+        }
+
+        _gameOver = true;
+
+        int winner;
+        if (Scores[0] > Scores[1])      winner = 0;
+        else if (Scores[1] > Scores[0]) winner = 1;
+        else                             winner = -1;
+
+        OnGameOver?.Invoke(winner);
     }
 
     public void AddScore(int playerIndex, int points = 1)
